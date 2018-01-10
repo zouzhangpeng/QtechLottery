@@ -5,7 +5,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.model.LotteryInfo;
-
+/**
+ * 把不同类型的奖品分给不同类型的员工
+ * @author zhangpeng.zhou
+ *
+ */
 public class ShowListUtil {
 
 	public void showListUtil(List<Map<String, Object>> list1, List<Map<String, Object>> list2, String type) {

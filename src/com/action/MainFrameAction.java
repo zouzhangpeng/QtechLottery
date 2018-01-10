@@ -51,13 +51,13 @@ public class MainFrameAction implements ActionListener {
 			}
 		} else if (e.getSource() == basicSetBtn) {
 			if (flag == 1) {
-				DialogUtil.ShowDialog(null, "请先打开抽奖界面", Constant.WARNING_MESSAGE_DIALOG_TYPE);
+				DialogUtil.showDialog(null, "请先打开抽奖界面", Constant.WARNING_MESSAGE_DIALOG_TYPE);
 			} else {
 				new BasicSetFrame().setVisible(true);
 			}
 		} else if (e.getSource() == luckyDrawSetBtn) {
 			if (flag == 1) {
-				DialogUtil.ShowDialog(null, "请先打开抽奖界面", Constant.WARNING_MESSAGE_DIALOG_TYPE);
+				DialogUtil.showDialog(null, "请先打开抽奖界面", Constant.WARNING_MESSAGE_DIALOG_TYPE);
 			} else {
 				new LotterySetFrame().setVisible(true);
 			}

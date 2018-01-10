@@ -4,7 +4,9 @@ import java.io.*;
 import java.util.Properties;
 
 /**
- * 读写properties文件
+ * Properties文件操作
+ * @author zhangpeng.zhou
+ *
  */
 public class PropertiesUtil {
 

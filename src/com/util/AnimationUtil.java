@@ -2,8 +2,13 @@ package com.util;
 
 import javax.swing.*;
 
+/**
+ * 滑动动画
+ * 
+ * @author zhangpeng.zhou
+ *
+ */
 public class AnimationUtil {
-	public static Thread t;
 
 	/**
 	 * panel横向滑动
@@ -18,6 +23,7 @@ public class AnimationUtil {
 	public static void horizontalRoll(JPanel childPanel, JPanel cyclePanel, int parentPanelWidth, int width, int height,
 			int y) {
 		new Thread() {
+			@Override
 			public void run() {
 				int x1 = -width;
 				int x2 = -width * 2;
@@ -44,7 +50,8 @@ public class AnimationUtil {
 
 	public static void verticalRoll(JComponent component, JComponent cycleComponent, int parentHeight, int width,
 			int height) {
-		t = new Thread() {
+		new Thread() {
+			@Override
 			public void run() {
 				int y1 = -height;
 				int y2 = -height * 2;
@@ -66,7 +73,6 @@ public class AnimationUtil {
 					y2++;
 				}
 			}
-		};
-		t.start();
+		}.start();
 	}
 }

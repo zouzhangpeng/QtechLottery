@@ -16,26 +16,31 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
-public class PDFWriteUtil {
+/**
+ * PDF文件生成
+ * @author zhangpeng.zhou
+ *
+ */
+public class PdfWriteUtil {
 
-    Document document = null;// 建立一个Document对象
+    Document document = null;
     private static Font headFont;
     private static Font textfont_H;
     int maxWidth = 520;
 
     static {
-        BaseFont bfChinese_H;
+        BaseFont bfChineseH;
         try {
             /**
              * 新建一个字体,iText的方法 STSongStd-Light 是字体，在iTextAsian.jar 中以property为后缀
              * UniGB-UCS2-H 是编码，在iTextAsian.jar 中以cmap为后缀 H 代表文字版式是 横版， 相应的 V 代表竖版
              */
-            bfChinese_H = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
+            bfChineseH = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
 
-            headFont = new Font(bfChinese_H, 10, Font.NORMAL);
-            new Font(bfChinese_H, 18, Font.BOLD);
-            textfont_H = new Font(bfChinese_H, 10, Font.NORMAL);
-            new Font(bfChinese_H, 12, Font.NORMAL);
+            headFont = new Font(bfChineseH, 10, Font.NORMAL);
+            new Font(bfChineseH, 18, Font.BOLD);
+            textfont_H = new Font(bfChineseH, 10, Font.NORMAL);
+            new Font(bfChineseH, 12, Font.NORMAL);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -47,14 +52,14 @@ public class PDFWriteUtil {
      *
      * @param file
      */
-    public PDFWriteUtil(File file) {
+    public PdfWriteUtil(File file) {
 
         // 自定义纸张
         Rectangle rectPageSize = new Rectangle(350, 620);
 
         // 定义A4页面大小
-        // Rectangle rectPageSize = new Rectangle(PageSize.A4);
-        rectPageSize = rectPageSize.rotate();// 加上这句可以实现页面的横置
+     // 加上这句可以实现页面的横置
+        rectPageSize = rectPageSize.rotate();
         document = new Document(rectPageSize, 10, 150, 10, 40);
 
         try {
@@ -109,10 +114,10 @@ public class PDFWriteUtil {
      * @param rowspan
      * @return
      */
-    public PdfPCell createCell(String value, Font font, int align_v, int align_h, int colspan, int rowspan) {
+    public PdfPCell createCell(String value, Font font, int alignV, int alignH, int colspan, int rowspan) {
         PdfPCell cell = new PdfPCell();
-        cell.setVerticalAlignment(align_v);
-        cell.setHorizontalAlignment(align_h);
+        cell.setVerticalAlignment(alignV);
+        cell.setHorizontalAlignment(alignH);
         cell.setColspan(colspan);
         cell.setRowspan(rowspan);
         cell.setPhrase(new Phrase(value, font));

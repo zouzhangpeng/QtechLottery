@@ -6,7 +6,11 @@ import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
 import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.FrameBorderStyle;
 
 import com.view.MainFrame;
-
+/**
+ * 程序启动入口
+ * @author zhangpeng.zhou
+ *
+ */
 public class Main {
 
 	public static void main(String[] args) {
@@ -20,6 +24,7 @@ public class Main {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		//启动主界面
 		MainFrame mainView = new MainFrame();
 		mainView.setVisible(true);
 	}

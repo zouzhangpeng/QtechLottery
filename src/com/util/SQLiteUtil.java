@@ -8,7 +8,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+/**
+ * SQLite工具类
+ * @author zhangpeng.zhou
+ *
+ */
 public class SQLiteUtil {
 	public String driver = null;
 	public String url = null;
@@ -234,7 +238,7 @@ public class SQLiteUtil {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			DialogUtil.ShowDialog(null, Constant.SQL_ERROR_DIALOG_MESSAGE, Constant.ERROR_MESSAGE_DIALOG_TYPE);
+			DialogUtil.showDialog(null, Constant.SQL_ERROR_DIALOG_MESSAGE, Constant.ERROR_MESSAGE_DIALOG_TYPE);
 		} finally {
 			closeConnection(rs, pstmt, con);
 		}
@@ -255,7 +259,7 @@ public class SQLiteUtil {
 			pstmt.executeUpdate(); // 执行更新
 		} catch (SQLException e) {
 			e.printStackTrace();
-			DialogUtil.ShowDialog(null, Constant.SQL_ERROR_DIALOG_MESSAGE, Constant.ERROR_MESSAGE_DIALOG_TYPE);
+			DialogUtil.showDialog(null, Constant.SQL_ERROR_DIALOG_MESSAGE, Constant.ERROR_MESSAGE_DIALOG_TYPE);
 		} finally {
 			closeConnection(rs, pstmt, con);
 		}
@@ -273,7 +277,7 @@ public class SQLiteUtil {
 			Class.forName(driver);
 			con = DriverManager.getConnection(url);
 		} catch (ClassNotFoundException | SQLException e) {
-			DialogUtil.ShowDialog(null, Constant.SQL_ERROR_DIALOG_MESSAGE, Constant.ERROR_MESSAGE_DIALOG_TYPE);
+			DialogUtil.showDialog(null, Constant.SQL_ERROR_DIALOG_MESSAGE, Constant.ERROR_MESSAGE_DIALOG_TYPE);
 			e.printStackTrace();
 		}
 		return con;
@@ -287,14 +291,17 @@ public class SQLiteUtil {
 
 	public void closeConnection(ResultSet rs, PreparedStatement pstmt, Connection con) {
 		try {
-			if (rs != null)
-				rs.close();
-			if (pstmt != null)
+			if (rs != null) {
+				rs.close();	
+			}
+			if (pstmt != null) {
 				pstmt.close();
-			if (con != null)
+			}
+			if (con != null) {
 				con.close();
+			}
 		} catch (SQLException e) {
-			DialogUtil.ShowDialog(null, Constant.SQL_ERROR_DIALOG_MESSAGE, Constant.ERROR_MESSAGE_DIALOG_TYPE);
+			DialogUtil.showDialog(null, Constant.SQL_ERROR_DIALOG_MESSAGE, Constant.ERROR_MESSAGE_DIALOG_TYPE);
 			e.printStackTrace();
 		}
 	}

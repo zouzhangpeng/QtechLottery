@@ -21,9 +21,9 @@ public class WorkUtil extends SwingWorker<Object, Object> {
 		try {
 			List<Map<String, Object>> list = new SQLiteUtil().queryLuckyEmpInfo(LotteryInfo.prizeType,
 					LotteryInfo.prizeName);
-			new PDFWriteUtil(file).generatePDF(list, LotteryInfo.prizeType);
+			new PdfWriteUtil(file).generatePDF(list, LotteryInfo.prizeType);
 		} catch (Exception e1) {
-			DialogUtil.ShowDialog(null, "保存文件失败！", Constant.ERROR_MESSAGE_DIALOG_TYPE);
+			DialogUtil.showDialog(null, "保存文件失败！", Constant.ERROR_MESSAGE_DIALOG_TYPE);
 			e1.printStackTrace();
 		}
 		return null;

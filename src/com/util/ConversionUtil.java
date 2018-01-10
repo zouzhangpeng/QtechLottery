@@ -1,8 +1,15 @@
 package com.util;
 
+/**
+ * 字符转换
+ * 
+ * @author zhangpeng.zhou
+ *
+ */
 public class ConversionUtil {
 	/**
 	 * 数字转中文
+	 * 
 	 * @param num
 	 * @return
 	 */
@@ -48,6 +55,7 @@ public class ConversionUtil {
 
 	/**
 	 * 中文转数字
+	 * 
 	 * @param string
 	 * @return
 	 */
@@ -90,53 +98,58 @@ public class ConversionUtil {
 		}
 		return num;
 	}
-	
-	   /**
-     * 根据奖项和奖品获取对应图片名称
-     *
-     * @param prizeType 奖项
-     * @param prizeName 奖品
-     * @return
-     */
-    public static String getImageNamePath(String prizeType, String prizeName) {
-        StringBuffer imagePath = new StringBuffer(prizeName);
-        imagePath.append("-");
-        switch (prizeType) {
-            case "特等奖":
-                imagePath.append(0);
-                break;
-            case "一等奖":
-                imagePath.append(1);
-                break;
-            case "二等奖":
-                imagePath.append(2);
-                break;
-            case "三等奖":
-                imagePath.append(3);
-                break;
-            case "四等奖":
-                imagePath.append(4);
-                break;
-            case "五等奖":
-                imagePath.append(5);
-                break;
-            case "六等奖":
-                imagePath.append(6);
-                break;
-            case "七等奖":
-                imagePath.append(7);
-                break;
-            case "八等奖":
-                imagePath.append(8);
-                break;
-            case "九等奖":
-                imagePath.append(9);
-                break;
-            case "十等奖":
-                imagePath.append(10);
-                break;
-        }
-        imagePath.append(".jpg");
-        return imagePath.toString();
-    }
+
+	/**
+	 * 根据奖项和奖品获取对应图片名称
+	 *
+	 * @param prizeType
+	 *            奖项
+	 * @param prizeName
+	 *            奖品
+	 * @return
+	 */
+	public static String getImageNamePath(String prizeType, String prizeName) {
+		StringBuffer imagePath = new StringBuffer(prizeName);
+		imagePath.append("-");
+		switch (prizeType) {
+		case "特等奖":
+			imagePath.append(0);
+			break;
+		case "一等奖":
+			imagePath.append(1);
+			break;
+		case "二等奖":
+			imagePath.append(2);
+			break;
+		case "三等奖":
+			imagePath.append(3);
+			break;
+		case "四等奖":
+			imagePath.append(4);
+			break;
+		case "五等奖":
+			imagePath.append(5);
+			break;
+		case "六等奖":
+			imagePath.append(6);
+			break;
+		case "七等奖":
+			imagePath.append(7);
+			break;
+		case "八等奖":
+			imagePath.append(8);
+			break;
+		case "九等奖":
+			imagePath.append(9);
+			break;
+		case "十等奖":
+			imagePath.append(10);
+			break;
+		default:
+			imagePath.append(10);
+			break;
+		}
+		imagePath.append(".jpg");
+		return imagePath.toString();
+	}
 }

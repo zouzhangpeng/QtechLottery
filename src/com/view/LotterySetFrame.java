@@ -162,7 +162,7 @@ public class LotterySetFrame extends JFrame {
 			public void windowClosing(WindowEvent e) {
 				super.windowClosing(e);
 				if (LotteryInfo.lotteryStatus == 1) {
-					DialogUtil.ShowDialog(null, "抽奖过程中无法退出！", Constant.WARNING_MESSAGE_DIALOG_TYPE);
+					DialogUtil.showDialog(null, "抽奖过程中无法退出！", Constant.WARNING_MESSAGE_DIALOG_TYPE);
 					return;
 				}
 			}

@@ -186,7 +186,7 @@ public class BasicSetFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				PropertiesUtil.writeProperties(Constant.CONFIG_PROPERTIES_FILE_PATH, Constant.MAIN_TITLE_FONT_SIZE,
 						mainTitleFontText.getText());
-				DialogUtil.ShowDialog(null, Constant.UPDATE_SUCCESS_DIALOG_MESSAGE,
+				DialogUtil.showDialog(null, Constant.UPDATE_SUCCESS_DIALOG_MESSAGE,
 						Constant.INFORMATION_MESSAGE_DIALOG_TYPE);
 			}
 		});
@@ -196,7 +196,7 @@ public class BasicSetFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				PropertiesUtil.writeProperties(Constant.CONFIG_PROPERTIES_FILE_PATH, Constant.CHILD_TITLE_FONT_SIZE,
 						childTitleFontText.getText());
-				DialogUtil.ShowDialog(null, Constant.UPDATE_SUCCESS_DIALOG_MESSAGE,
+				DialogUtil.showDialog(null, Constant.UPDATE_SUCCESS_DIALOG_MESSAGE,
 						Constant.INFORMATION_MESSAGE_DIALOG_TYPE);
 			}
 		});
@@ -206,7 +206,7 @@ public class BasicSetFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				PropertiesUtil.writeProperties(Constant.CONFIG_PROPERTIES_FILE_PATH, Constant.PRIZE_INFO_FONT,
 						prizeInfoFontText.getText());
-				DialogUtil.ShowDialog(null, Constant.UPDATE_SUCCESS_DIALOG_MESSAGE,
+				DialogUtil.showDialog(null, Constant.UPDATE_SUCCESS_DIALOG_MESSAGE,
 						Constant.INFORMATION_MESSAGE_DIALOG_TYPE);
 			}
 		});
@@ -216,7 +216,7 @@ public class BasicSetFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				PropertiesUtil.writeProperties(Constant.CONFIG_PROPERTIES_FILE_PATH, Constant.NORTH_HEIGHT,
 						northHeightText.getText());
-				DialogUtil.ShowDialog(null, Constant.UPDATE_SUCCESS_DIALOG_MESSAGE,
+				DialogUtil.showDialog(null, Constant.UPDATE_SUCCESS_DIALOG_MESSAGE,
 						Constant.INFORMATION_MESSAGE_DIALOG_TYPE);
 			}
 		});
