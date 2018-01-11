@@ -14,7 +14,11 @@ public class Task extends TimerTask {
     @Override
     public void run() {
         ShowLotteryPanel.luckyDrawPanel.removeAll();
-        LotteryInfo.luckyPeopleList = new SQLiteUtil().getRandom();
+        if("加码奖".equals(LotteryInfo.prizeType)) {
+        	LotteryInfo.luckyPeopleList = new SQLiteUtil().getRandomExtra();
+        }else {
+        	LotteryInfo.luckyPeopleList = new SQLiteUtil().getRandom();
+        }
         JLabel[] textList = new JLabel[LotteryInfo.luckyPeopleList.size()];
         for (int i = 0, j = textList.length; i < j; i++) {
             textList[i] = new JLabel(LotteryInfo.luckyPeopleList.get(i).get("emp_no") + " "

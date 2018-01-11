@@ -2,8 +2,10 @@ package com.model;
 
 import java.util.List;
 import java.util.Map;
+
 /**
  * 中间变量
+ * 
  * @author zhangpeng.zhou
  *
  */
@@ -77,8 +79,24 @@ public class LotteryInfo {
 	 */
 	public static int dEmpQuantity;
 	/**
+	 * 加码奖数量
+	 */
+	public static int extraPrizeQuantity;
+	/**
 	 * 抽奖状态
 	 */
 	public static int lotteryStatus = 0;
+	/**
+	 * 奖项下拉框选择序号
+	 */
+	public static int prizeTypeIndex = 0;
+	/**
+	 * 奖品下拉框选择序号
+	 */
+	public static int prizeIndex = 0;
+	/**
+	 * 奖项下拉框选项数
+	 */
+	public static int prizeCount = 0;
 
 }

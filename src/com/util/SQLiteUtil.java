@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 /**
  * SQLite工具类
+ * 
  * @author zhangpeng.zhou
  *
  */
@@ -28,10 +30,11 @@ public class SQLiteUtil {
 	public String[] queryPrizeTypes() {
 		String sql = "select distinct prize_type from prize where prize_quantity <> 0 order by id";
 		List<Map<String, Object>> list = queryData(sql);
-		String[] prizeTypes = new String[list.size() + 1];
+		String[] prizeTypes = new String[list.size() + 2];
 		prizeTypes[0] = "==请选择==";
+		prizeTypes[1] = "加码奖";
 		for (int i = 0, j = list.size(); i < j; i++) {
-			prizeTypes[i + 1] = (String) list.get(i).get("prize_type");
+			prizeTypes[i + 2] = (String) list.get(i).get("prize_type");
 		}
 		return prizeTypes;
 	}
@@ -99,6 +102,23 @@ public class SQLiteUtil {
 		empInfoList.addAll(LotteryInfo.cempList);
 		empInfoList.addAll(LotteryInfo.dempList);
 		return empInfoList;
+	}
+	
+	/**
+	 * 加码奖
+	 * @return
+	 */
+	public List<Map<String, Object>> getRandomExtra() {
+		String sql = "select emp_no,emp_name,emp_first_department,emp_secondary_department,emp_three_department from employee where emp_type = 'A' and prize_name is null ORDER BY RANDOM() LIMIT "
+				+ LotteryInfo.lotteryQuantity;
+		List<Map<String, Object>> empInfoList = queryData(sql);
+		return empInfoList;
+	}
+
+	public int queryQuantityByType(String prizeType) {
+		String sql = "select sum(prize_quantity) quantity from prize where prize_type = '" + prizeType + "'";
+		List<Map<String, Object>> list = queryData(sql);
+		return (int) list.get(0).get("quantity");
 	}
 
 	/**
@@ -292,7 +312,7 @@ public class SQLiteUtil {
 	public void closeConnection(ResultSet rs, PreparedStatement pstmt, Connection con) {
 		try {
 			if (rs != null) {
-				rs.close();	
+				rs.close();
 			}
 			if (pstmt != null) {
 				pstmt.close();

@@ -1,6 +1,8 @@
 package com.util;
 
 import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -81,5 +83,19 @@ public class Utils {
         String[] strs = str.split("\\*");
         return strs;
     }
+    
+    /**
+     * 判断字符串是否为数字
+     * @param str
+     * @return
+     */
+    public static boolean isNumeric(String str) {
+		Pattern pattern = Pattern.compile("[0-9]*");
+		Matcher isNum = pattern.matcher(str);
+		if (!isNum.matches()) {
+			return false;
+		}
+		return true;
+	}
 
 }

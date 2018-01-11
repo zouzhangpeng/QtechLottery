@@ -15,7 +15,11 @@ import com.view.BasicSetFrame;
 import com.view.LotterySetFrame;
 import com.view.ScreenChooseDialog;
 import com.view.ShowLotteryFrame;
-
+/**
+ * 主界面监听事件
+ * @author zhangpeng.zhou
+ *
+ */
 public class MainFrameAction implements ActionListener {
 	private JButton startLuckyDrawBtn, basicSetBtn, luckyDrawSetBtn;
 	public ShowLotteryFrame showLotteryFrame;

@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -19,6 +20,7 @@ import javax.swing.SwingUtilities;
 import com.model.Constant;
 import com.model.LotteryInfo;
 import com.util.AnimationUtil;
+import com.util.DialogUtil;
 import com.util.ImageLabelUtil;
 import com.util.PropertiesUtil;
 import com.util.SQLiteUtil;
@@ -26,14 +28,23 @@ import com.util.ShowListUtil;
 import com.util.TableModelUtil;
 import com.util.TableUtil;
 import com.util.Task;
+import com.util.Utils;
 import com.util.WorkUtil;
 import com.view.LotterySetFrame;
 import com.view.ShowImagePanel;
 import com.view.ShowLotteryFrame;
 import com.view.ShowRollEmpPanel;
 
+/**
+ * 抽奖设置监听事件
+ * 
+ * @author zhangpeng.zhou
+ *
+ */
 public class LotterySetFrameAction implements ActionListener {
 	private ScheduledExecutorService service;
+	private String prizeTypeComboBoxString;
+	private String prizeComboBoxString;
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -45,44 +56,65 @@ public class LotterySetFrameAction implements ActionListener {
 			for (int i = 0, j = prizes.length; i < j; i++) {
 				LotterySetFrame.prizeComboBox.addItem(prizes[i]);
 			}
-			LotterySetFrame.esureBtn.setEnabled(true);
-		} else if (e.getSource() == LotterySetFrame.esureBtn) {
-			// 确定按钮
-			// 奖项名称
-			LotteryInfo.prizeType = LotterySetFrame.prizeTypeComboBox.getSelectedItem().toString();
-			// 奖品名称
-			String prizeComboBoxString = LotterySetFrame.prizeComboBox.getSelectedItem().toString();
-			LotteryInfo.prizeName = (prizeComboBoxString.equals("==请选择==") ? "" : prizeComboBoxString);
-			LotteryInfo.aPrizeInfoList = new SQLiteUtil().getLotteryPrizeInfoByType(LotteryInfo.prizeType,
-					LotteryInfo.prizeName, "prize_aemp");
-			LotteryInfo.bPrizeInfoList = new SQLiteUtil().getLotteryPrizeInfoByType(LotteryInfo.prizeType,
-					LotteryInfo.prizeName, "prize_bemp");
-			LotteryInfo.cPrizeInfoList = new SQLiteUtil().getLotteryPrizeInfoByType(LotteryInfo.prizeType,
-					LotteryInfo.prizeName, "prize_cemp");
-			LotteryInfo.dPrizeInfoList = new SQLiteUtil().getLotteryPrizeInfoByType(LotteryInfo.prizeType,
-					LotteryInfo.prizeName, "prize_demp");
-			LotteryInfo.aEmpQuantity = 0;
-			for (int i = 0, j = LotteryInfo.aPrizeInfoList.size(); i < j; i++) {
-				LotteryInfo.aEmpQuantity += (int) LotteryInfo.aPrizeInfoList.get(i).get("prize_aemp");
-			}
-			LotteryInfo.bEmpQuantity = 0;
-			for (int i = 0, j = LotteryInfo.bPrizeInfoList.size(); i < j; i++) {
-				LotteryInfo.bEmpQuantity += (int) LotteryInfo.bPrizeInfoList.get(i).get("prize_bemp");
-			}
-			LotteryInfo.cEmpQuantity = 0;
-			for (int i = 0, j = LotteryInfo.cPrizeInfoList.size(); i < j; i++) {
-				LotteryInfo.cEmpQuantity += (int) LotteryInfo.cPrizeInfoList.get(i).get("prize_cemp");
-			}
-			LotteryInfo.dEmpQuantity = 0;
-			for (int i = 0, j = LotteryInfo.dPrizeInfoList.size(); i < j; i++) {
-				LotteryInfo.dEmpQuantity += (int) LotteryInfo.dPrizeInfoList.get(i).get("prize_demp");
-			}
-			LotteryInfo.lotteryQuantity = LotteryInfo.aEmpQuantity + LotteryInfo.bEmpQuantity + LotteryInfo.cEmpQuantity
-					+ LotteryInfo.dEmpQuantity;
+			prizeTypeComboBoxString = LotterySetFrame.prizeTypeComboBox.getSelectedItem().toString();
+			LotteryInfo.prizeType = ("==请选择==".equals(prizeTypeComboBoxString) ? "" : prizeTypeComboBoxString);
 			LotterySetFrame.prizeTypeText.setText(LotteryInfo.prizeType);
-			LotterySetFrame.prizeText.setText(LotteryInfo.prizeName);
-			LotterySetFrame.quantityText.setText(String.valueOf(LotteryInfo.lotteryQuantity));
-			LotterySetFrame.showPictureBtn.setEnabled(true);
+			LotterySetFrame.esureBtn.setEnabled(true);
+		} else if (e.getSource() == LotterySetFrame.prizeComboBox) {
+			if (LotterySetFrame.prizeComboBox.getItemCount() != 0) {
+				prizeComboBoxString = LotterySetFrame.prizeComboBox.getSelectedItem().toString();
+				LotteryInfo.prizeName = ("==请选择==".equals(prizeComboBoxString) ? "" : prizeComboBoxString);
+				LotterySetFrame.prizeText.setText(LotteryInfo.prizeName);
+			}
+		} else if (e.getSource() == LotterySetFrame.esureBtn) {
+			LotteryInfo.prizeTypeIndex = LotterySetFrame.prizeTypeComboBox.getSelectedIndex();
+			LotteryInfo.prizeIndex = LotterySetFrame.prizeComboBox.getSelectedIndex();
+			LotteryInfo.prizeCount = LotterySetFrame.prizeComboBox.getItemCount();
+
+			if ("加码奖".equals(LotteryInfo.prizeType)) {
+				if ("".equals(LotterySetFrame.prizeText.getText())
+						|| LotterySetFrame.prizeText.getText().equals(null)) {
+					DialogUtil.showDialog(null, "请输入奖品名称！", Constant.WARNING_MESSAGE_DIALOG_TYPE);
+				} else if ("".equals(LotterySetFrame.quantityText.getText())
+						|| LotterySetFrame.quantityText.getText().equals(null)) {
+					DialogUtil.showDialog(null, "请输入奖品数量！", Constant.WARNING_MESSAGE_DIALOG_TYPE);
+				} else if (!Utils.isNumeric(LotterySetFrame.quantityText.getText())) {
+					DialogUtil.showDialog(null, "奖品数量必须为数量！", Constant.WARNING_MESSAGE_DIALOG_TYPE);
+				} else {
+					LotteryInfo.prizeName = LotterySetFrame.prizeText.getText();
+					LotteryInfo.lotteryQuantity = Integer.parseInt(LotterySetFrame.quantityText.getText());
+					LotterySetFrame.showPictureBtn.setEnabled(true);
+				}
+			} else {
+				LotteryInfo.aPrizeInfoList = new SQLiteUtil().getLotteryPrizeInfoByType(LotteryInfo.prizeType,
+						LotteryInfo.prizeName, "prize_aemp");
+				LotteryInfo.bPrizeInfoList = new SQLiteUtil().getLotteryPrizeInfoByType(LotteryInfo.prizeType,
+						LotteryInfo.prizeName, "prize_bemp");
+				LotteryInfo.cPrizeInfoList = new SQLiteUtil().getLotteryPrizeInfoByType(LotteryInfo.prizeType,
+						LotteryInfo.prizeName, "prize_cemp");
+				LotteryInfo.dPrizeInfoList = new SQLiteUtil().getLotteryPrizeInfoByType(LotteryInfo.prizeType,
+						LotteryInfo.prizeName, "prize_demp");
+				LotteryInfo.aEmpQuantity = 0;
+				for (int i = 0, j = LotteryInfo.aPrizeInfoList.size(); i < j; i++) {
+					LotteryInfo.aEmpQuantity += (int) LotteryInfo.aPrizeInfoList.get(i).get("prize_aemp");
+				}
+				LotteryInfo.bEmpQuantity = 0;
+				for (int i = 0, j = LotteryInfo.bPrizeInfoList.size(); i < j; i++) {
+					LotteryInfo.bEmpQuantity += (int) LotteryInfo.bPrizeInfoList.get(i).get("prize_bemp");
+				}
+				LotteryInfo.cEmpQuantity = 0;
+				for (int i = 0, j = LotteryInfo.cPrizeInfoList.size(); i < j; i++) {
+					LotteryInfo.cEmpQuantity += (int) LotteryInfo.cPrizeInfoList.get(i).get("prize_cemp");
+				}
+				LotteryInfo.dEmpQuantity = 0;
+				for (int i = 0, j = LotteryInfo.dPrizeInfoList.size(); i < j; i++) {
+					LotteryInfo.dEmpQuantity += (int) LotteryInfo.dPrizeInfoList.get(i).get("prize_demp");
+				}
+				LotteryInfo.lotteryQuantity = LotteryInfo.aEmpQuantity + LotteryInfo.bEmpQuantity
+						+ LotteryInfo.cEmpQuantity + LotteryInfo.dEmpQuantity;
+				LotterySetFrame.quantityText.setText(String.valueOf(LotteryInfo.lotteryQuantity));
+				LotterySetFrame.showPictureBtn.setEnabled(true);
+			}
 		} else if (e.getSource() == LotterySetFrame.showPictureBtn) {
 			// 展示图片
 			ShowImagePanel.imageContainerPanel.removeAll();
@@ -148,12 +180,26 @@ public class LotterySetFrameAction implements ActionListener {
 			LotterySetFrame.endBtn.setEnabled(true);
 		} else if (e.getSource() == LotterySetFrame.endBtn) {
 			service.shutdown();
-			long startTime = System.currentTimeMillis();
 			LotteryInfo.showPeopleList = new ArrayList<Map<String, Object>>();
-			new ShowListUtil().showListUtil(LotteryInfo.aPrizeInfoList, LotteryInfo.aempList, "prize_aemp");
-			new ShowListUtil().showListUtil(LotteryInfo.bPrizeInfoList, LotteryInfo.bempList, "prize_bemp");
-			new ShowListUtil().showListUtil(LotteryInfo.cPrizeInfoList, LotteryInfo.cempList, "prize_cemp");
-			new ShowListUtil().showListUtil(LotteryInfo.dPrizeInfoList, LotteryInfo.dempList, "prize_demp");
+			if ("加码奖".equals(LotteryInfo.prizeType)) {
+				for (int i = 0, j = LotteryInfo.luckyPeopleList.size(); i < j; i++) {
+					Map<String, Object> map = new HashMap<String, Object>();
+					map.put("emp_no", LotteryInfo.luckyPeopleList.get(i).get("emp_no"));
+					map.put("emp_name", LotteryInfo.luckyPeopleList.get(i).get("emp_name"));
+					map.put("emp_first_department", LotteryInfo.luckyPeopleList.get(i).get("emp_first_department"));
+					map.put("emp_secondary_department",
+							LotteryInfo.luckyPeopleList.get(i).get("emp_secondary_department"));
+					map.put("emp_three_department", LotteryInfo.luckyPeopleList.get(i).get("emp_three_department"));
+					map.put("prize_type", LotteryInfo.prizeType);
+					map.put("prize_name", LotteryInfo.prizeName);
+					LotteryInfo.showPeopleList.add(map);
+				}
+			} else {
+				new ShowListUtil().showListUtil(LotteryInfo.aPrizeInfoList, LotteryInfo.aempList, "prize_aemp");
+				new ShowListUtil().showListUtil(LotteryInfo.bPrizeInfoList, LotteryInfo.bempList, "prize_bemp");
+				new ShowListUtil().showListUtil(LotteryInfo.cPrizeInfoList, LotteryInfo.cempList, "prize_cemp");
+				new ShowListUtil().showListUtil(LotteryInfo.dPrizeInfoList, LotteryInfo.dempList, "prize_demp");
+			}
 			ShowLotteryFrame.cardLayout.show(ShowLotteryFrame.mianContentPanel, "emptyPanel");
 			ShowLotteryFrame.cardLayout.show(ShowLotteryFrame.mianContentPanel, "showRollPeoplePanel");
 			ShowRollEmpPanel.tableHeaderPanel.removeAll();
@@ -167,8 +213,8 @@ public class LotterySetFrameAction implements ActionListener {
 						(String) LotteryInfo.showPeopleList.get(i).get("prize_name") };
 				luckyEmps.add(empInfos);
 			}
-			String[] tableTitle = new String[] { "工号", "姓名", "奖项", "奖品" };
 			// 表头
+			String[] tableTitle = new String[] { "工号", "姓名", "奖项", "奖品" };
 			JTable luckyEmpTable = new TableUtil().getTable(new TableModelUtil(luckyEmps, tableTitle),
 					ShowRollEmpPanel.centerPanel);
 			int tableH = Integer
@@ -178,7 +224,8 @@ public class LotterySetFrameAction implements ActionListener {
 			int parentHeight = ShowRollEmpPanel.tableBodyPanel.getHeight();
 			luckyEmpTable.getTableHeader().setBounds(0, 0, parentWidth, tableH);
 			ShowRollEmpPanel.tableHeaderPanel.add(luckyEmpTable.getTableHeader());
-			if (tableHeight <= parentHeight - 30) {
+			int length = 30;
+			if (tableHeight <= parentHeight - length) {
 				luckyEmpTable.setBounds(0, 20, parentWidth, tableHeight);
 				ShowRollEmpPanel.tableBodyPanel.add(luckyEmpTable);
 			} else {
@@ -191,6 +238,7 @@ public class LotterySetFrameAction implements ActionListener {
 				AnimationUtil.verticalRoll(luckyEmpTable, cloneTable, parentHeight, parentWidth, tableHeight);
 			}
 			SwingUtilities.invokeLater(new Runnable() {
+				@Override
 				public void run() {
 					new WorkUtil().execute();
 				}
@@ -199,8 +247,6 @@ public class LotterySetFrameAction implements ActionListener {
 			LotterySetFrame.esureBtn.setEnabled(true);
 			LotterySetFrame.closelotteryBtn.setEnabled(true);
 			LotteryInfo.lotteryStatus = 0;
-			long endTime = System.currentTimeMillis();
-			System.out.println(endTime-startTime);
 		} else if (e.getSource() == LotterySetFrame.closelotteryBtn) {
 			ShowLotteryFrame.showLuckDrawFrame.dispose();
 			LotterySetFrame.lotterySetFrame.dispose();

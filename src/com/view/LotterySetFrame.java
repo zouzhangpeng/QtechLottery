@@ -59,17 +59,14 @@ public class LotterySetFrame extends JFrame {
 
 		prizeTypeLabel = new JLabel("当前奖项  ", JLabel.CENTER);
 		prizeTypeText = new JTextField();
-		prizeTypeText.setEditable(false);
 		prizeTypeComboBox = new JComboBox<String>(prizeTypes);
 
 		prizeLabel = new JLabel("当前奖品  ", JLabel.CENTER);
 		prizeText = new JTextField();
-		prizeText.setEditable(false);
 		prizeComboBox = new JComboBox<String>(prizes);
 
 		quantityLabel = new JLabel("数量", JLabel.CENTER);
 		quantityText = new JTextField();
-		quantityText.setEditable(false);
 
 		esureBtn = new JButton("确定");
 		esureBtn.setEnabled(false);
