@@ -28,7 +28,7 @@ public class SQLiteUtil {
 	 * @return
 	 */
 	public String[] queryPrizeTypes() {
-		String sql = "select distinct prize_type from prize where prize_quantity <> 0 order by id";
+		String sql = "select distinct prize_type from prize where prize_quantity <> 0 order by id desc";
 		List<Map<String, Object>> list = queryData(sql);
 		String[] prizeTypes = new String[list.size() + 2];
 		prizeTypes[0] = "==请选择==";

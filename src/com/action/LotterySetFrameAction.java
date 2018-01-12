@@ -86,6 +86,9 @@ public class LotterySetFrameAction implements ActionListener {
 					LotterySetFrame.showPictureBtn.setEnabled(true);
 				}
 			} else {
+				prizeComboBoxString = LotterySetFrame.prizeComboBox.getSelectedItem().toString();
+				LotteryInfo.prizeName = prizeComboBoxString;
+				LotteryInfo.prizeName = ("==请选择==".equals(prizeComboBoxString) ? "" : prizeComboBoxString);
 				LotteryInfo.aPrizeInfoList = new SQLiteUtil().getLotteryPrizeInfoByType(LotteryInfo.prizeType,
 						LotteryInfo.prizeName, "prize_aemp");
 				LotteryInfo.bPrizeInfoList = new SQLiteUtil().getLotteryPrizeInfoByType(LotteryInfo.prizeType,
