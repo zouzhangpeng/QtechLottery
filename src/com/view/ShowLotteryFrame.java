@@ -38,10 +38,6 @@ public class ShowLotteryFrame extends JFrame {
 	public static CardLayout cardLayout;
 	// 标题
 	public static JPanel titlePanel;
-	public static JPanel mainTitlePanel;
-	public static JPanel childTitlePanel;
-	public static JLabel mainTitleLabel;// 主标题
-	public static JLabel childTitleLabel;// 子标题
 	// 主要内容
 	public static JPanel mianContentPanel;
 	public static JPanel westPanel;
@@ -110,29 +106,9 @@ public class ShowLotteryFrame extends JFrame {
 		cardLayout = new CardLayout();
 
 		titlePanel = new JPanel();
-		titlePanel.setPreferredSize(new Dimension(screenWidth, northHeight));
+		titlePanel.setPreferredSize(new Dimension(screenWidth, screenHeight/4));
 		titlePanel.setOpaque(false);
 		titlePanel.setLayout(new BorderLayout());
-
-		mainTitlePanel = new JPanel();
-		mainTitlePanel.setOpaque(false);
-		mainTitlePanel.setLayout(new FlowLayout());
-
-		mainTitleLabel = new JLabel(
-				PropertiesUtil.getValueByKey(Constant.CONFIG_PROPERTIES_FILE_PATH, Constant.MAIN_TITLE_TEXT),
-				JLabel.CENTER);
-		mainTitleLabel.setFont(new Font("微软雅黑", Font.BOLD, mainTitleFontSize));
-		mainTitleLabel.setForeground(Color.WHITE);
-
-		childTitlePanel = new JPanel();
-		childTitlePanel.setOpaque(false);
-		childTitlePanel.setLayout(new FlowLayout());
-
-		childTitleLabel = new JLabel(
-				PropertiesUtil.getValueByKey(Constant.CONFIG_PROPERTIES_FILE_PATH, Constant.CHILD_TITLE_TEXT),
-				JLabel.CENTER);
-		childTitleLabel.setFont(new Font("微软雅黑", Font.BOLD, childTitleFontSize));
-		childTitleLabel.setForeground(Color.ORANGE);
 
 		mianContentPanel = new JPanel();
 		mianContentPanel.setOpaque(false);
@@ -176,12 +152,6 @@ public class ShowLotteryFrame extends JFrame {
 		contentPanel.add(westPanel, BorderLayout.WEST);
 		contentPanel.add(eastPanel, BorderLayout.EAST);
 		contentPanel.add(southPanel, BorderLayout.SOUTH);
-
-		titlePanel.add(mainTitlePanel, BorderLayout.NORTH);
-		titlePanel.add(childTitlePanel, BorderLayout.CENTER);
-
-		mainTitlePanel.add(mainTitleLabel);
-		childTitlePanel.add(childTitleLabel);
 
 		mianContentPanel.add(emptyPanel, "emptyPanel");
 		mianContentPanel.add(new ShowImagePanel(), "showImagePanel");
