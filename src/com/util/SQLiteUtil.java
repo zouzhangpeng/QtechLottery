@@ -28,7 +28,7 @@ public class SQLiteUtil {
 	 * @return
 	 */
 	public String[] queryPrizeTypes() {
-		String sql = "select distinct prize_type from prize where prize_quantity <> 0 order by id desc";
+		String sql = "select distinct prize_type from prize where prize_quantity <> 0 order by prize_id ";
 		List<Map<String, Object>> list = queryData(sql);
 		String[] prizeTypes = new String[list.size() + 2];
 		prizeTypes[0] = "==请选择==";
@@ -45,35 +45,33 @@ public class SQLiteUtil {
 	 * @param prizeType
 	 */
 	public String[] queryPrizes(String prizeType) {
-		String sql = "select prize_name,prize_quantity from prize where prize_type ='" + prizeType
-				+ "' and prize_quantity <> 0";
-		List<Map<String, Object>> list = queryData(sql);
-		String[] prizes = new String[list.size() + 1];
-		prizes[0] = "==请选择==";
-		for (int i = 0, j = list.size(); i < j; i++) {
-			prizes[i + 1] = list.get(i).get("prize_name").toString();
+		List<String> lotteryTurnList = new ArrayList<String>();
+		if ("一帆风顺奖".equals(prizeType) || "万事如意奖".equals(prizeType) || "加码奖".equals(prizeType)) {
+			lotteryTurnList.add(Constant.PRIZE_COMBOBOX_TURN_ONE);
+		} else {
+			lotteryTurnList.add(Constant.PRIZE_COMBOBOX_TURN_ONE);
+			lotteryTurnList.add(Constant.PRIZE_COMBOBOX_TURN_TWO);
 		}
-		return prizes;
+		String[] array = new String[lotteryTurnList.size()];
+		String[] lotteryTurns = lotteryTurnList.toArray(array);
+		return lotteryTurns;
 	}
 
 	/**
-	 * 根据类型奖品信息
+	 * 根据类型查询奖品信息
 	 * 
 	 * @param prizeType
 	 * @param prizeName
 	 * @param empType
 	 * @return
 	 */
-	public List<Map<String, Object>> getLotteryPrizeInfoByType(String prizeType, String prizeName, String empType) {
+	public List<Map<String, Object>> getLotteryPrizeInfoByType(String prizeType, String prizeTurn, String empType) {
 		String sql = null;
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		if (prizeName.equals("") || prizeName == null) {
-			sql = "select prize_type, prize_name," + empType + " from prize where prize_type = '" + prizeType + "'";
-			list = queryData(sql);
-		} else {
-			sql = "select prize_type,prize_name," + empType + " from prize where prize_name = '" + prizeName + "'";
-			list = queryData(sql);
-		}
+		int turn = (Constant.PRIZE_COMBOBOX_TURN_ONE.equals(prizeTurn) ? 1 : 2);
+		sql = "select prize_id, prize_type,prize_name," + empType + " from prize where prize_type = '" + prizeType
+				+ "' and prize_turn = " + turn + "";
+		list = queryData(sql);
 		return list;
 	}
 
@@ -103,9 +101,10 @@ public class SQLiteUtil {
 		empInfoList.addAll(LotteryInfo.dempList);
 		return empInfoList;
 	}
-	
+
 	/**
 	 * 加码奖
+	 * 
 	 * @return
 	 */
 	public List<Map<String, Object>> getRandomExtra() {
@@ -168,8 +167,8 @@ public class SQLiteUtil {
 	public void updateLuckyPrize() {
 		String[] sqls = new String[LotteryInfo.aPrizeInfoList.size()];
 		for (int i = 0, j = LotteryInfo.aPrizeInfoList.size(); i < j; i++) {
-			sqls[i] = "update prize set prize_quantity = 0,prize_aemp = 0,prize_bemp = 0,prize_cemp = 0,prize_demp = 0 where prize_name = '"
-					+ LotteryInfo.aPrizeInfoList.get(i).get("prize_name") + "';";
+			sqls[i] = "update prize set prize_quantity = 0,prize_aemp = 0,prize_bemp = 0,prize_cemp = 0,prize_demp = 0 where prize_id = '"
+					+ LotteryInfo.aPrizeInfoList.get(i).get("prize_id") + "';";
 		}
 		Statement ste = null;
 		try {
@@ -209,18 +208,13 @@ public class SQLiteUtil {
 	 * @param prizeName
 	 * @return
 	 */
-	public List<Map<String, Object>> queryLuckyEmpInfo(String prizeType, String prizeName) {
+	public List<Map<String, Object>> queryLuckyEmpInfo(String prizeType,String prizeTurn) {
 		String sql = null;
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		if (prizeName.equals("") || prizeName == null) {
-			sql = "select emp_no,emp_name,emp_first_department,emp_secondary_department,emp_three_department, prize_name from employee where prize_type = '"
-					+ prizeType + "' order by prize_name";
-			list = queryData(sql);
-		} else {
-			sql = "select emp_no,emp_name,emp_first_department,emp_secondary_department,emp_three_department,prize_name from employee where prize_name = '"
-					+ prizeName + "' order by prize_name";
-			list = queryData(sql);
-		}
+		int turn = (Constant.PRIZE_COMBOBOX_TURN_ONE.equals(prizeTurn) ? 1 : 2);
+		sql = "select emp_no,emp_name,emp_first_department,emp_secondary_department,emp_three_department, prize_name from employee where prize_type = '"
+				+ prizeType + " and prize_turn = "+ turn +" order by prize_name";
+		list = queryData(sql);
 		return list;
 	}
 

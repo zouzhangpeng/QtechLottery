@@ -100,4 +100,10 @@ public class Constant {
 	public final static String SQL_ERROR_DIALOG_MESSAGE = "数据库连接错误！";
 	public final static String LOTTERY_DIALOG_MESSAGE = "请先打开抽奖界面";
 	public final static String UPDATE_SUCCESS_DIALOG_MESSAGE = "更新成功！";
+	
+	/**
+	 * 抽奖次序下拉框固定值
+	 */
+	public final static String PRIZE_COMBOBOX_TURN_ONE = "第一次抽奖";
+	public final static String PRIZE_COMBOBOX_TURN_TWO = "第二次抽奖";
 }

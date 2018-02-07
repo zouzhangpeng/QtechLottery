@@ -15,9 +15,9 @@ public class LotteryInfo {
 	 */
 	public static String prizeType;
 	/**
-	 * 当前奖品
+	 * 当前次序
 	 */
-	public static String prizeName;
+	public static String prizeTurn;
 	/**
 	 * 当前抽奖总数量
 	 */

@@ -29,8 +29,8 @@ public class ShowLotteryPanel extends JPanel {
         showLuckyDrawTipPanel.setOpaque(false);
         showLuckyDrawTipPanel.setLayout(new FlowLayout());
 
-        showLuckyDrawTipLabel = new JLabel("好紧张哦，期待中！", JLabel.CENTER);
-        showLuckyDrawTipLabel.setFont(new Font("方正少儿简体", Font.BOLD, 50));
+        showLuckyDrawTipLabel = new JLabel("", JLabel.CENTER);
+        showLuckyDrawTipLabel.setFont(new Font("微软雅黑", Font.BOLD, 50));
         showLuckyDrawTipLabel.setForeground(Color.ORANGE);
 
         luckyDrawContainerPanel = new JPanel();

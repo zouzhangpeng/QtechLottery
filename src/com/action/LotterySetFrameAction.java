@@ -33,6 +33,7 @@ import com.util.WorkUtil;
 import com.view.LotterySetFrame;
 import com.view.ShowImagePanel;
 import com.view.ShowLotteryFrame;
+import com.view.ShowLotteryPanel;
 import com.view.ShowRollEmpPanel;
 
 /**
@@ -62,9 +63,9 @@ public class LotterySetFrameAction implements ActionListener {
 			LotterySetFrame.esureBtn.setEnabled(true);
 		} else if (e.getSource() == LotterySetFrame.prizeComboBox) {
 			if (LotterySetFrame.prizeComboBox.getItemCount() != 0) {
-				prizeComboBoxString = LotterySetFrame.prizeComboBox.getSelectedItem().toString();
-				LotteryInfo.prizeName = ("==请选择==".equals(prizeComboBoxString) ? "" : prizeComboBoxString);
-				LotterySetFrame.prizeText.setText(LotteryInfo.prizeName);
+				LotteryInfo.prizeTurn = LotterySetFrame.prizeComboBox.getSelectedItem().toString();
+				//LotteryInfo.prizeTurn = (Constant.PRIZE_COMBOBOX_TURN_ONE.equals(prizeComboBoxString) ? "" : prizeComboBoxString);
+				LotterySetFrame.prizeText.setText(LotteryInfo.prizeTurn);
 			}
 		} else if (e.getSource() == LotterySetFrame.esureBtn) {
 			LotteryInfo.prizeTypeIndex = LotterySetFrame.prizeTypeComboBox.getSelectedIndex();
@@ -81,22 +82,22 @@ public class LotterySetFrameAction implements ActionListener {
 				} else if (!Utils.isNumeric(LotterySetFrame.quantityText.getText())) {
 					DialogUtil.showDialog(null, "奖品数量必须为数量！", Constant.WARNING_MESSAGE_DIALOG_TYPE);
 				} else {
-					LotteryInfo.prizeName = LotterySetFrame.prizeText.getText();
+					LotteryInfo.prizeTurn = LotterySetFrame.prizeText.getText();
 					LotteryInfo.lotteryQuantity = Integer.parseInt(LotterySetFrame.quantityText.getText());
 					LotterySetFrame.showPictureBtn.setEnabled(true);
 				}
 			} else {
 				prizeComboBoxString = LotterySetFrame.prizeComboBox.getSelectedItem().toString();
-				LotteryInfo.prizeName = prizeComboBoxString;
-				LotteryInfo.prizeName = ("==请选择==".equals(prizeComboBoxString) ? "" : prizeComboBoxString);
+				LotteryInfo.prizeTurn = prizeComboBoxString;
+				LotteryInfo.prizeTurn = ("==请选择==".equals(prizeComboBoxString) ? "" : prizeComboBoxString);
 				LotteryInfo.aPrizeInfoList = new SQLiteUtil().getLotteryPrizeInfoByType(LotteryInfo.prizeType,
-						LotteryInfo.prizeName, "prize_aemp");
+						LotteryInfo.prizeTurn, "prize_aemp");
 				LotteryInfo.bPrizeInfoList = new SQLiteUtil().getLotteryPrizeInfoByType(LotteryInfo.prizeType,
-						LotteryInfo.prizeName, "prize_bemp");
+						LotteryInfo.prizeTurn, "prize_bemp");
 				LotteryInfo.cPrizeInfoList = new SQLiteUtil().getLotteryPrizeInfoByType(LotteryInfo.prizeType,
-						LotteryInfo.prizeName, "prize_cemp");
+						LotteryInfo.prizeTurn, "prize_cemp");
 				LotteryInfo.dPrizeInfoList = new SQLiteUtil().getLotteryPrizeInfoByType(LotteryInfo.prizeType,
-						LotteryInfo.prizeName, "prize_demp");
+						LotteryInfo.prizeTurn, "prize_demp");
 				LotteryInfo.aEmpQuantity = 0;
 				for (int i = 0, j = LotteryInfo.aPrizeInfoList.size(); i < j; i++) {
 					LotteryInfo.aEmpQuantity += (int) LotteryInfo.aPrizeInfoList.get(i).get("prize_aemp");
@@ -122,14 +123,14 @@ public class LotterySetFrameAction implements ActionListener {
 			// 展示图片
 			ShowImagePanel.imageContainerPanel.removeAll();
 			// 跳转到图片展示panel
-			ShowImagePanel.prizeLabel.setText(LotteryInfo.prizeType + " " + LotteryInfo.prizeName);
+			ShowImagePanel.prizeLabel.setText(LotteryInfo.prizeType + " " + LotteryInfo.prizeTurn);
 			ShowImagePanel.prizeQuantityLabel.setText(LotteryInfo.lotteryQuantity + "名");
 			JPanel animationHContainerPanel = new JPanel();
 			animationHContainerPanel.setOpaque(false);
 			animationHContainerPanel.setLayout(null);
 			ShowImagePanel.imageContainerPanel.add(animationHContainerPanel, BorderLayout.CENTER);
 			List<JLabel> imageLabelList = ImageLabelUtil.getImageLabelList(Constant.SHOW_IMAGE_PATH,
-					LotteryInfo.prizeType, LotteryInfo.prizeName);
+					LotteryInfo.prizeType, LotteryInfo.prizeTurn);
 			JPanel imagePanel = new JPanel();
 			imagePanel.setOpaque(false);
 			imagePanel.setLayout(new BoxLayout(imagePanel, BoxLayout.X_AXIS));
@@ -154,7 +155,7 @@ public class LotterySetFrameAction implements ActionListener {
 				imagePanel.setBounds(-imagePanelWidth, (parentHeight - imageHeight) / 2, imagePanelWidth, imageHeight);
 				animationHContainerPanel.add(imagePanel);
 				List<JLabel> cycleImageLabelList = ImageLabelUtil.getImageLabelList(Constant.SHOW_IMAGE_PATH,
-						LotteryInfo.prizeType, LotteryInfo.prizeName);
+						LotteryInfo.prizeType, LotteryInfo.prizeTurn);
 				JPanel cycleImagePanel = new JPanel();
 				cycleImagePanel.setOpaque(false);
 				cycleImagePanel.setLayout(new BoxLayout(cycleImagePanel, BoxLayout.X_AXIS));
@@ -173,6 +174,7 @@ public class LotterySetFrameAction implements ActionListener {
 			LotterySetFrame.closelotteryBtn.setEnabled(false);
 			LotteryInfo.lotteryStatus = 1;
 		} else if (e.getSource() == LotterySetFrame.startBtn) {
+			ShowLotteryPanel.showLuckyDrawTipLabel.setText(LotteryInfo.prizeType);
 			int frequency = Integer
 					.parseInt(PropertiesUtil.getValueByKey(Constant.CONFIG_PROPERTIES_FILE_PATH, "frequency"));
 			service = Executors.newScheduledThreadPool(1);
@@ -194,7 +196,7 @@ public class LotterySetFrameAction implements ActionListener {
 							LotteryInfo.luckyPeopleList.get(i).get("emp_secondary_department"));
 					map.put("emp_three_department", LotteryInfo.luckyPeopleList.get(i).get("emp_three_department"));
 					map.put("prize_type", LotteryInfo.prizeType);
-					map.put("prize_name", LotteryInfo.prizeName);
+					map.put("prize_name", LotteryInfo.prizeTurn);
 					LotteryInfo.showPeopleList.add(map);
 				}
 			} else {

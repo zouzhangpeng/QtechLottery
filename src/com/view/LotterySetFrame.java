@@ -61,7 +61,7 @@ public class LotterySetFrame extends JFrame {
 		prizeTypeText = new JTextField();
 		prizeTypeComboBox = new JComboBox<String>(prizeTypes);
 
-		prizeLabel = new JLabel("当前奖品  ", JLabel.CENTER);
+		prizeLabel = new JLabel("当前次序  ", JLabel.CENTER);
 		prizeText = new JTextField();
 		prizeComboBox = new JComboBox<String>(prizes);
 

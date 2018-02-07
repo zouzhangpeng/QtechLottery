@@ -21,7 +21,7 @@ public class MainFrame extends JFrame {
      */
     private static final long serialVersionUID = 1L;
     private JPanel contentPanel;
-    private JButton startLuckyDrawBtn, basicSetBtn, luckyDrawSetBtn, exitBtn;
+    private JButton startLuckyDrawBtn, luckyDrawSetBtn, exitBtn;
 
     public MainFrame() {
         initComponent();
@@ -35,7 +35,7 @@ public class MainFrame extends JFrame {
      */
     private void initFrame() {
         setContentPane(contentPanel);
-        setSize(new Dimension(600, 400));
+        setSize(new Dimension(400, 400));
         setLocationRelativeTo(null);
         setUndecorated(true);
         getRootPane().setWindowDecorationStyle(JRootPane.NONE);
@@ -48,9 +48,6 @@ public class MainFrame extends JFrame {
         startLuckyDrawBtn = new JButton("开始抽奖");
         startLuckyDrawBtn.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.blue));
         startLuckyDrawBtn.setFont(new Font("微软雅黑", Font.BOLD, 40));
-        basicSetBtn = new JButton("基础设置");
-        basicSetBtn.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.blue));
-        basicSetBtn.setFont(new Font("微软雅黑", Font.BOLD, 40));
         luckyDrawSetBtn = new JButton("抽奖设置");
         luckyDrawSetBtn.setUI(new BEButtonUI().setNormalColor(BEButtonUI.NormalColor.blue));
         luckyDrawSetBtn.setFont(new Font("微软雅黑", Font.BOLD, 40));
@@ -59,7 +56,7 @@ public class MainFrame extends JFrame {
         exitBtn.setFont(new Font("微软雅黑", Font.BOLD, 40));
         contentPanel = new JPanel();
         contentPanel.setOpaque(false);
-        contentPanel.setLayout(new GridLayout(2, 2));
+        contentPanel.setLayout(new GridLayout(3, 1));
     }
 
     /**
@@ -68,7 +65,6 @@ public class MainFrame extends JFrame {
     private void initUI() {
         // 窗口横向布局
         contentPanel.add(startLuckyDrawBtn);
-        contentPanel.add(basicSetBtn);
         contentPanel.add(luckyDrawSetBtn);
         contentPanel.add(exitBtn);
     }
@@ -77,10 +73,9 @@ public class MainFrame extends JFrame {
      * 初始化监听事件
      */
     private void initListener() {
-        MainFrameAction mainFrameAction = new MainFrameAction(startLuckyDrawBtn, basicSetBtn, luckyDrawSetBtn,
+        MainFrameAction mainFrameAction = new MainFrameAction(startLuckyDrawBtn, luckyDrawSetBtn,
                 exitBtn);
         startLuckyDrawBtn.addActionListener(mainFrameAction);
-        basicSetBtn.addActionListener(mainFrameAction);
         luckyDrawSetBtn.addActionListener(mainFrameAction);
         exitBtn.addActionListener(mainFrameAction);
     }

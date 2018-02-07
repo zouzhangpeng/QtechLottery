@@ -15,19 +15,20 @@ import com.view.BasicSetFrame;
 import com.view.LotterySetFrame;
 import com.view.ScreenChooseDialog;
 import com.view.ShowLotteryFrame;
+
 /**
  * 主界面监听事件
+ * 
  * @author zhangpeng.zhou
  *
  */
 public class MainFrameAction implements ActionListener {
-	private JButton startLuckyDrawBtn, basicSetBtn, luckyDrawSetBtn;
+	private JButton startLuckyDrawBtn, luckyDrawSetBtn;
 	public ShowLotteryFrame showLotteryFrame;
 	public int flag = 1;
 
-	public MainFrameAction(JButton startLuckyDrawBtn, JButton basicSetBtn, JButton luckyDrawSetBtn, JButton exitBtn) {
+	public MainFrameAction(JButton startLuckyDrawBtn, JButton luckyDrawSetBtn, JButton exitBtn) {
 		this.startLuckyDrawBtn = startLuckyDrawBtn;
-		this.basicSetBtn = basicSetBtn;
 		this.luckyDrawSetBtn = luckyDrawSetBtn;
 	}
 
@@ -52,12 +53,6 @@ public class MainFrameAction implements ActionListener {
 					screens[i] = ConversionUtil.numToChinese(i);
 				}
 				new ScreenChooseDialog(showLotteryFrame, screens).setVisible(true);
-			}
-		} else if (e.getSource() == basicSetBtn) {
-			if (flag == 1) {
-				DialogUtil.showDialog(null, "请先打开抽奖界面", Constant.WARNING_MESSAGE_DIALOG_TYPE);
-			} else {
-				new BasicSetFrame().setVisible(true);
 			}
 		} else if (e.getSource() == luckyDrawSetBtn) {
 			if (flag == 1) {
